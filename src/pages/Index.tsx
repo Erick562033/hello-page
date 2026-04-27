@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StoreHeader } from "@/components/StoreHeader";
+import { MegaMenu } from "@/components/MegaMenu";
 import { HeroBanner } from "@/components/HeroBanner";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -14,6 +15,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 texture-paper">
       <StoreHeader />
+      <MegaMenu onSelect={setCategory} />
       <div className="pt-3">
         <HeroBanner />
         <FlashSaleBanner />

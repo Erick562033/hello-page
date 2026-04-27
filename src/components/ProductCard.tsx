@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Loader2, Star, ImageOff } from "lucide-react";
+import { ShoppingBag, Loader2, Star, ImageOff, Eye } from "lucide-react";
 import { useCartStore, type ShopifyProduct } from "@/stores/cartStore";
 import { toast } from "sonner";
 
 interface ProductCardProps {
   product: ShopifyProduct;
+  onQuickView?: (product: ShopifyProduct) => void;
 }
 
 const hash = (s: string) => {
@@ -13,7 +14,7 @@ const hash = (s: string) => {
   return h;
 };
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const isLoading = useCartStore((state) => state.isLoading);
   const { node } = product;
@@ -70,6 +71,21 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <div className="h-full w-full flex items-center justify-center text-muted-foreground">
               <ImageOff className="h-10 w-10" />
             </div>
+          )}
+
+          {/* Quick view */}
+          {onQuickView && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onQuickView(product);
+              }}
+              aria-label="Quick view"
+              className="absolute bottom-2 left-2 h-10 w-10 rounded-full bg-card text-secondary shadow-elevated flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110 border-2 border-secondary/40"
+            >
+              <Eye className="h-4 w-4" strokeWidth={2.2} />
+            </button>
           )}
 
           {/* Quick add */}
