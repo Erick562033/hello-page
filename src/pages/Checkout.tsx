@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { StoreHeader } from "@/components/StoreHeader";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { useCartStore } from "@/stores/cartStore";
+import { useOrdersStore } from "@/stores/ordersStore";
 
 type Method = "mpesa" | "card" | "airtel" | "cod";
 
@@ -17,7 +18,8 @@ const METHODS: { id: Method; name: string; tag: string; icon: React.ComponentTyp
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore();
+  const addOrder = useOrdersStore((s) => s.addOrder);
   const totalItems = items.reduce((n, i) => n + i.quantity, 0);
   const subtotal = items.reduce((n, i) => n + parseFloat(i.price.amount) * i.quantity, 0);
   const currency = items[0]?.price.currencyCode || "KES";
@@ -31,6 +33,7 @@ const Checkout = () => {
   const [city, setCity] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +48,25 @@ const Checkout = () => {
     setSubmitting(true);
     // UI only — simulate processing
     await new Promise((r) => setTimeout(r, 1400));
+
+    const newOrder = addOrder({
+      items: items.map((i) => ({
+        variantId: i.variantId,
+        title: i.product.node.title,
+        image: i.product.node.images.edges[0]?.node?.url ?? null,
+        quantity: i.quantity,
+        price: { amount: i.price.amount, currencyCode: i.price.currencyCode },
+      })),
+      subtotal,
+      shipping,
+      total,
+      currency,
+      paymentMethod: method,
+      delivery: { name, phone, address, city },
+    });
+
+    setOrderId(newOrder.id);
+    clearCart();
     setSubmitting(false);
     setDone(true);
     toast.success(
@@ -68,14 +90,29 @@ const Checkout = () => {
           </div>
           <h1 className="font-display text-3xl font-black text-secondary">Asante sana!</h1>
           <p className="text-muted-foreground mt-2 text-sm">
-            Your order has been placed. We'll send tracking updates by SMS.
+            Your order has been placed. Track every step from packing to your door.
           </p>
-          <button
-            onClick={() => navigate("/")}
-            className="mt-6 bg-primary text-primary-foreground rounded-full px-6 py-3 font-grotesk uppercase tracking-wider text-xs font-bold"
-          >
-            Continue Shopping
-          </button>
+          {orderId && (
+            <p className="text-xs text-muted-foreground mt-2 font-grotesk">
+              Order <span className="font-bold text-secondary">#{orderId}</span>
+            </p>
+          )}
+          <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
+            {orderId && (
+              <button
+                onClick={() => navigate(`/orders/${orderId}`)}
+                className="bg-primary text-primary-foreground rounded-full px-6 py-3 font-grotesk uppercase tracking-wider text-xs font-bold"
+              >
+                Track order
+              </button>
+            )}
+            <button
+              onClick={() => navigate("/")}
+              className="border-2 border-secondary/30 text-secondary rounded-full px-6 py-3 font-grotesk uppercase tracking-wider text-xs font-bold hover:bg-secondary/5 transition"
+            >
+              Continue shopping
+            </button>
+          </div>
         </div>
         <MobileBottomNav />
       </div>
