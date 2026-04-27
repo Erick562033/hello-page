@@ -410,13 +410,14 @@ const ProductDetail = () => {
 
       {/* Sticky bottom action bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card flex items-center gap-2 p-2.5 shadow-elevated md:hidden">
-        <button
+        <Link
+          to="/chat"
           className="h-12 w-12 rounded-xl border border-border flex flex-col items-center justify-center text-secondary"
-          aria-label="Chat"
+          aria-label="Chat with us"
         >
           <MessageCircle className="h-4 w-4" />
           <span className="text-[9px] font-grotesk mt-0.5">Chat</span>
-        </button>
+        </Link>
         <button
           onClick={() => handleAddToCart(false)}
           disabled={isCartLoading || !matchedVariant?.availableForSale}

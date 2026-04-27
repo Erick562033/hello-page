@@ -12,13 +12,14 @@ export const MobileBottomNav = () => {
   const { pathname } = useLocation();
   const { user, displayName } = useAuth();
 
-  const accountLabel = user && displayName ? displayName.split(" ")[0].slice(0, 8) : "Account";
+  const isLoggedIn = Boolean(user && displayName);
+  const accountLabel = isLoggedIn ? displayName!.split(" ")[0].slice(0, 8) : "Account";
 
   const items = [
     { icon: Home, label: "Home", to: "/" },
     { icon: LayoutGrid, label: "Soko", to: "/soko" },
     { icon: Heart, label: "Wishlist", to: "/wishlist" },
-    { icon: User, label: accountLabel, to: "/account" },
+    { icon: User, label: isLoggedIn ? "Profile" : accountLabel, to: "/account" },
   ];
 
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
