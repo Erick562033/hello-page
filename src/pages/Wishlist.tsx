@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Heart, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowLeft, Heart, ChevronRight, Sparkles, Trash2, ShoppingBag } from "lucide-react";
 import { StoreHeader } from "@/components/StoreHeader";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { useWishlistStore } from "@/stores/wishlistStore";
+import { toast } from "sonner";
 
-/**
- * Wishlist — saved items page.
- * Empty state for now; ready to plug into a wishlist store later.
- */
 const Wishlist = () => {
-  const items: Array<{ id: string; title: string; price: number; image: string }> = [];
+  const items = useWishlistStore((s) => s.items);
+  const remove = useWishlistStore((s) => s.remove);
+  const clear = useWishlistStore((s) => s.clear);
+
+  const formatPrice = (p: { amount: string; currencyCode: string }) =>
+    `${p.currencyCode === "KES" ? "KSh" : p.currencyCode} ${parseFloat(p.amount).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 texture-paper">
@@ -23,19 +26,29 @@ const Wishlist = () => {
           <span className="text-secondary font-bold">Wishlist</span>
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
-          <div>
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
             <h1 className="font-display text-3xl md:text-4xl font-black text-secondary">
               Your <em className="not-italic text-primary">wishlist</em>
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Pieces you love, saved for later.
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">Pieces you love, saved for later.</p>
           </div>
-          <span className="hidden md:inline-flex items-center gap-1.5 bg-accent/20 text-secondary text-xs font-grotesk font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">
-            <Heart className="h-3.5 w-3.5 fill-primary text-primary" /> {items.length} saved
+          <span className="inline-flex items-center gap-1.5 bg-accent/20 text-secondary text-xs font-grotesk font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shrink-0">
+            <Heart className="h-3.5 w-3.5 fill-primary text-primary" /> {items.length}
           </span>
         </div>
+
+        {items.length > 0 && (
+          <button
+            onClick={() => {
+              clear();
+              toast.success("Wishlist cleared");
+            }}
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-grotesk font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive transition"
+          >
+            <Trash2 className="h-3.5 w-3.5" /> Clear all
+          </button>
+        )}
       </section>
 
       <main className="container mx-auto px-4 mt-6">
@@ -44,9 +57,7 @@ const Wishlist = () => {
             <div className="mx-auto h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
               <Heart className="h-9 w-9 text-primary" strokeWidth={2} />
             </div>
-            <h2 className="font-display text-2xl md:text-3xl font-black text-secondary">
-              No favourites yet
-            </h2>
+            <h2 className="font-display text-2xl md:text-3xl font-black text-secondary">No favourites yet</h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
               Tap the heart on any product to save it here. We'll keep it warm until you're ready.
             </p>
@@ -58,8 +69,57 @@ const Wishlist = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {/* Render saved items here when wishlist store is wired */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {items.map((it) => (
+              <div
+                key={it.id}
+                className="group relative bg-card rounded-2xl overflow-hidden border border-border shadow-soft hover:shadow-elevated transition"
+              >
+                <Link to={`/product/${it.handle}`} className="block">
+                  <div className="aspect-square bg-muted overflow-hidden">
+                    {it.image ? (
+                      <img
+                        src={it.image}
+                        alt={it.title}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-[13px] leading-snug text-foreground line-clamp-2 min-h-[34px] font-medium">
+                      {it.title}
+                    </h3>
+                    <div className="font-display text-lg font-black text-primary leading-none mt-1">
+                      {formatPrice(it.price)}
+                    </div>
+                  </div>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    remove(it.id);
+                    toast.info("Removed from wishlist");
+                  }}
+                  aria-label="Remove from wishlist"
+                  className="absolute top-2 right-2 h-9 w-9 rounded-full bg-card/95 backdrop-blur text-destructive shadow-card flex items-center justify-center hover:scale-110 transition"
+                >
+                  <Trash2 className="h-4 w-4" strokeWidth={2.2} />
+                </button>
+
+                <Link
+                  to={`/product/${it.handle}`}
+                  className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-secondary text-accent shadow-elevated flex items-center justify-center opacity-0 group-hover:opacity-100 transition border-2 border-accent/40"
+                  aria-label="View product"
+                >
+                  <ShoppingBag className="h-4 w-4" strokeWidth={2.2} />
+                </Link>
+              </div>
+            ))}
           </div>
         )}
       </main>

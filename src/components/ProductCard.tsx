@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Loader2, Star, ImageOff, Eye } from "lucide-react";
+import { ShoppingBag, Loader2, Star, ImageOff, Eye, Heart } from "lucide-react";
 import { useCartStore, type ShopifyProduct } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -17,6 +18,8 @@ const hash = (s: string) => {
 export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const isLoading = useCartStore((state) => state.isLoading);
+  const toggleWishlist = useWishlistStore((s) => s.toggle);
+  const isWished = useWishlistStore((s) => s.has(product.node.id));
   const { node } = product;
   const image = node.images.edges[0]?.node;
   const price = node.priceRange.minVariantPrice;
@@ -54,10 +57,29 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
 
         {/* Hot tag */}
         {isHot && (
-          <div className="absolute top-2.5 right-2.5 z-10 bg-accent text-accent-foreground text-[9px] font-grotesk font-bold uppercase tracking-wider px-1.5 py-0.5 rounded">
+          <div className="absolute top-2.5 right-12 z-10 bg-accent text-accent-foreground text-[9px] font-grotesk font-bold uppercase tracking-wider px-1.5 py-0.5 rounded">
             🔥 Hot
           </div>
         )}
+
+        {/* Wishlist heart */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const added = toggleWishlist(product);
+            toast[added ? "success" : "info"](
+              added ? "Saved to wishlist" : "Removed from wishlist",
+              { position: "top-center" }
+            );
+          }}
+          aria-label={isWished ? "Remove from wishlist" : "Add to wishlist"}
+          className={`absolute top-2 right-2 z-10 h-9 w-9 rounded-full flex items-center justify-center shadow-card transition-all hover:scale-110 ${
+            isWished ? "bg-primary text-primary-foreground" : "bg-card/95 text-secondary backdrop-blur"
+          }`}
+        >
+          <Heart className={`h-4 w-4 ${isWished ? "fill-current" : ""}`} strokeWidth={2.2} />
+        </button>
 
         <div className="aspect-square overflow-hidden bg-muted relative">
           {image ? (

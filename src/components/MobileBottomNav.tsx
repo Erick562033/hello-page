@@ -1,6 +1,6 @@
 import { Home, LayoutGrid, Heart, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useCartStore } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
  * like a native app shell. The active tab is derived from the URL.
  */
 export const MobileBottomNav = () => {
-  const totalItems = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
+  const wishlistCount = useWishlistStore((s) => s.items.length);
   const { pathname } = useLocation();
   const { user, displayName } = useAuth();
 
@@ -41,9 +41,9 @@ export const MobileBottomNav = () => {
                 <Icon className="h-5 w-5" strokeWidth={2.2} />
               </div>
               <span className="text-[10px] font-grotesk font-bold uppercase tracking-wider">{label}</span>
-              {label === "Wishlist" && totalItems > 0 && (
+              {label === "Wishlist" && wishlistCount > 0 && (
                 <span className="absolute top-1 right-1/4 h-4 min-w-4 px-1 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center">
-                  {totalItems}
+                  {wishlistCount}
                 </span>
               )}
             </Link>

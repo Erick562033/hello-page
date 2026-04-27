@@ -12,6 +12,8 @@ import Account from "./pages/Account.tsx";
 import Auth from "./pages/Auth.tsx";
 import Chat from "./pages/Chat.tsx";
 import Checkout from "./pages/Checkout.tsx";
+import Orders from "./pages/Orders.tsx";
+import OrderDetail from "./pages/OrderDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { WhatsAppFab } from "./components/WhatsAppFab";
 
@@ -37,6 +39,8 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
             <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
