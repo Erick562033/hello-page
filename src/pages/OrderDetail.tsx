@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { StoreHeader } from "@/components/StoreHeader";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { useOrdersStore, STATUS_META, STATUS_FLOW, type OrderStatus } from "@/stores/ordersStore";
-import { CONTACT } from "@/lib/contact";
+import { whatsappLink } from "@/lib/contact";
 
 const stepIcon: Record<OrderStatus, React.ComponentType<{ className?: string }>> = {
   placed: ClipboardCheck,
@@ -81,8 +81,7 @@ const OrderDetail = () => {
   };
 
   const whatsappTrack = () => {
-    const text = encodeURIComponent(`Hi Wajose, please update me on order ${order.id}.`);
-    window.open(`https://wa.me/${CONTACT.whatsappNumber.replace(/\D/g, "")}?text=${text}`, "_blank");
+    window.open(whatsappLink(`Hi Wajose, please update me on order ${order.id}.`), "_blank");
   };
 
   return (
