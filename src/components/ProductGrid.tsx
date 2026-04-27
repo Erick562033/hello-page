@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Loader2, PackageOpen, Flame } from "lucide-react";
 import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, type ShopifyProduct } from "@/lib/shopify";
 import { ProductCard } from "./ProductCard";
+import { QuickViewModal } from "./QuickViewModal";
 
 interface ProductGridProps {
   categoryFilter: string;
@@ -18,6 +19,7 @@ const titleMap: Record<string, string> = {
 export const ProductGrid = ({ categoryFilter }: ProductGridProps) => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [quickView, setQuickView] = useState<ShopifyProduct | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -81,11 +83,21 @@ export const ProductGrid = ({ categoryFilter }: ProductGridProps) => {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
             {products.map((product) => (
-              <ProductCard key={product.node.id} product={product} />
+              <ProductCard
+                key={product.node.id}
+                product={product}
+                onQuickView={setQuickView}
+              />
             ))}
           </div>
         )}
       </div>
+
+      <QuickViewModal
+        product={quickView}
+        open={!!quickView}
+        onOpenChange={(o) => !o && setQuickView(null)}
+      />
     </section>
   );
 };
