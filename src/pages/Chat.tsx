@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Send, Sparkles, Loader2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { whatsappLink, WHATSAPP_DISPLAY } from "@/lib/contact";
@@ -242,11 +242,9 @@ const Chat = () => {
         </form>
         <div className="text-center text-[10px] text-muted-foreground mt-1.5">
           Need a human?{" "}
-          <Link to="#" className="underline">
-            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="text-[#128C7E] font-semibold">
-              WhatsApp {WHATSAPP_DISPLAY}
-            </a>
-          </Link>
+          <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="text-[#128C7E] font-semibold underline">
+            WhatsApp {WHATSAPP_DISPLAY}
+          </a>
         </div>
       </div>
     </div>
