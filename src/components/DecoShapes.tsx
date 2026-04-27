@@ -13,7 +13,7 @@ export const DecoShapes = () => {
         {/* Floating shape lineup */}
         <div className="relative flex items-center justify-between gap-3 h-full">
           {/* Terracotta circle */}
-          <span className="h-3.5 w-3.5 md:h-4 md:w-4 rounded-full bg-primary shadow-soft animate-bounce-slow" />
+          <span className="h-3.5 w-3.5 md:h-4 md:w-4 rounded-full bg-primary shadow-soft animate-pulse" />
           {/* Gold square tilted */}
           <span className="h-3 w-3 md:h-3.5 md:w-3.5 bg-accent rotate-45 shadow-soft" />
           {/* Emerald pill */}
