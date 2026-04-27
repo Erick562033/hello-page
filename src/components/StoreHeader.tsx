@@ -6,7 +6,7 @@ import { PatternStrip } from "./PatternStrip";
 
 export const StoreHeader = () => {
   return (
-    <header className="relative shadow-card">
+    <header className="sticky top-0 z-50 shadow-card">
       {/* Top utility bar — deep emerald */}
       <div className="hidden md:block gradient-emerald text-secondary-foreground text-xs">
         <div className="container mx-auto px-4 h-9 flex items-center justify-between">
