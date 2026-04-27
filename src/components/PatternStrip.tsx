@@ -1,6 +1,6 @@
 /**
  * Decorative geometric strip inspired by Maasai shuka triangles.
- * A polished, layered band with alternating triangle heights, a soft cream
+ * Edge-to-edge band with alternating triangle heights, a soft cream
  * baseline, and a faint dotted underline for editorial finish.
  * Purely visual — used as a section divider beneath the header and elsewhere.
  */
@@ -15,16 +15,20 @@ export const PatternStrip = ({ className = "" }: { className?: string }) => {
     "hsl(var(--primary))",
   ];
 
+  // Render plenty of triangles so the row fills any viewport (4K included).
+  // Overflow-hidden trims the excess on smaller screens.
+  const COUNT = 240;
+
   return (
     <div
       aria-hidden
-      className={`relative bg-card border-y border-border/50 ${className}`}
+      className={`relative w-full bg-card border-y border-border/50 ${className}`}
     >
       {/* Faint dotted baseline for editorial polish */}
       <div className="absolute inset-x-0 bottom-1 h-px border-b border-dashed border-secondary/20" />
 
-      <div className="flex items-end justify-center gap-[3px] h-4 overflow-hidden px-2">
-        {Array.from({ length: 80 }).map((_, i) => {
+      <div className="flex items-end justify-start gap-[3px] h-4 overflow-hidden w-full">
+        {Array.from({ length: COUNT }).map((_, i) => {
           const c = colors[i % colors.length];
           // Alternate heights for a playful, hand-stamped rhythm.
           const tall = i % 3 === 0;
@@ -33,6 +37,7 @@ export const PatternStrip = ({ className = "" }: { className?: string }) => {
           return (
             <div
               key={i}
+              className="shrink-0"
               style={{
                 width: 0,
                 height: 0,
