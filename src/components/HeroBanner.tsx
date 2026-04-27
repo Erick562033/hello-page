@@ -64,6 +64,7 @@ export const HeroBanner = () => {
                 </button>
               </div>
             </div>
+          </div>
 
           {/* Side cards — playful asymmetric */}
           <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-1 gap-3">
