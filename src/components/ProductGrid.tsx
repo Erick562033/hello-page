@@ -98,6 +98,7 @@ export const ProductGrid = ({
         onFiltersChange={setFilters}
         open={mobileFiltersOpen}
         onOpenChange={onMobileFiltersOpenChange}
+        resultCount={filtered.length}
       />
 
       <div className="flex-1 min-w-0">
