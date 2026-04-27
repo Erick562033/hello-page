@@ -8,6 +8,7 @@ import { FlashSaleBanner } from "@/components/FlashSaleBanner";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { PatternStrip } from "@/components/PatternStrip";
 import { BrandMark } from "@/components/BrandMark";
+import { DecoShapes } from "@/components/DecoShapes";
 
 const Index = () => {
   const [category, setCategory] = useState("");
@@ -16,7 +17,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 texture-paper">
       <StoreHeader />
-      <div className="pt-3">
+      <DecoShapes />
+      <div className="pt-1">
         <HeroBanner />
         <FlashSaleBanner />
       </div>
