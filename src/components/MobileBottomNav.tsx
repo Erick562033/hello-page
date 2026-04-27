@@ -1,6 +1,7 @@
 import { Home, LayoutGrid, Heart, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
+import { useAuth } from "@/hooks/useAuth";
 
 /**
  * Mobile bottom navigation. Each tab routes to a real page so it works
@@ -9,12 +10,15 @@ import { useCartStore } from "@/stores/cartStore";
 export const MobileBottomNav = () => {
   const totalItems = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
   const { pathname } = useLocation();
+  const { user, displayName } = useAuth();
+
+  const accountLabel = user && displayName ? displayName.split(" ")[0].slice(0, 8) : "Account";
 
   const items = [
     { icon: Home, label: "Home", to: "/" },
     { icon: LayoutGrid, label: "Soko", to: "/soko" },
     { icon: Heart, label: "Wishlist", to: "/wishlist" },
-    { icon: User, label: "Account", to: "/account" },
+    { icon: User, label: accountLabel, to: "/account" },
   ];
 
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
