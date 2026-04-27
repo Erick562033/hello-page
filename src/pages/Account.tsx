@@ -31,7 +31,7 @@ const Account = () => {
     {
       title: "My Shop",
       items: [
-        { icon: Package, label: "My Orders", sub: "Track, return or reorder" },
+        { icon: Package, label: "My Orders", sub: "Track, return or reorder", to: "/orders" },
         { icon: Heart, label: "Wishlist", sub: "Saved pieces", to: "/wishlist" },
         { icon: MapPin, label: "Addresses", sub: "Manage delivery spots" },
         { icon: CreditCard, label: "Payment Methods", sub: "M-Pesa, card, COD" },
