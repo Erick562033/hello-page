@@ -7,8 +7,8 @@ import { CategorySidebar, emptyFilters, type ActiveFilters } from "./CategorySid
 
 interface ProductGridProps {
   categoryFilter: string;
-  mobileFiltersOpen: boolean;
-  onMobileFiltersOpenChange: (open: boolean) => void;
+  mobileFiltersOpen?: boolean;
+  onMobileFiltersOpenChange?: (open: boolean) => void;
 }
 
 const titleMap: Record<string, string> = {
@@ -21,8 +21,8 @@ const titleMap: Record<string, string> = {
 
 export const ProductGrid = ({
   categoryFilter,
-  mobileFiltersOpen,
-  onMobileFiltersOpenChange,
+  mobileFiltersOpen = false,
+  onMobileFiltersOpenChange = () => {},
 }: ProductGridProps) => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
