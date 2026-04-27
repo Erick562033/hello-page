@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { StoreHeader } from "@/components/StoreHeader";
-import { MegaMenu } from "@/components/MegaMenu";
 import { HeroBanner } from "@/components/HeroBanner";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -11,18 +11,34 @@ import { BrandMark } from "@/components/BrandMark";
 
 const Index = () => {
   const [category, setCategory] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 texture-paper">
       <StoreHeader />
-      <MegaMenu onSelect={setCategory} />
       <div className="pt-3">
         <HeroBanner />
         <FlashSaleBanner />
       </div>
       <main className="container mx-auto px-4">
         <CategoryFilter active={category} onChange={setCategory} />
-        <ProductGrid categoryFilter={category} />
+
+        {/* Mobile filter trigger */}
+        <div className="md:hidden flex justify-end mb-2">
+          <button
+            onClick={() => setFiltersOpen(true)}
+            className="flex items-center gap-1.5 bg-card border border-border shadow-soft rounded-full px-3.5 py-1.5 text-xs font-grotesk font-bold uppercase tracking-wider text-secondary"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            Filters
+          </button>
+        </div>
+
+        <ProductGrid
+          categoryFilter={category}
+          mobileFiltersOpen={filtersOpen}
+          onMobileFiltersOpenChange={setFiltersOpen}
+        />
       </main>
 
       {/* Editorial brand banner */}
