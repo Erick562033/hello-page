@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   ChevronRight,
@@ -10,16 +10,23 @@ import {
   Bell,
   HelpCircle,
   LogIn,
+  LogOut,
   Shield,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 import { StoreHeader } from "@/components/StoreHeader";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { useAuth } from "@/hooks/useAuth";
 
 /**
- * Account — profile hub with shortcuts to orders, addresses, payment, etc.
- * Logged-out state by default; ready to wire to auth later.
+ * Account — profile hub. Shows guest CTA when logged out, and the user's
+ * name + sign-out when signed in. Auth is backed by Lovable Cloud.
  */
 const Account = () => {
+  const navigate = useNavigate();
+  const { user, displayName, loading, signOut } = useAuth();
+
   const sections = [
     {
       title: "My Shop",
@@ -40,6 +47,11 @@ const Account = () => {
     },
   ];
 
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Signed out", { description: "Karibu tena soon!" });
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 texture-paper">
       <StoreHeader />
@@ -56,29 +68,55 @@ const Account = () => {
 
       {/* Profile card */}
       <section className="container mx-auto px-4 mt-3">
-        <div className="rounded-2xl gradient-emerald text-secondary-foreground p-6 md:p-7 relative overflow-hidden shadow-elevated">
+        <div className="rounded-2xl gradient-emerald text-secondary-foreground p-5 sm:p-6 md:p-7 relative overflow-hidden shadow-elevated">
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-accent/20 rounded-full blur-2xl" />
-          <div className="relative flex items-center gap-4">
-            <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-card/15 backdrop-blur border-2 border-accent/40 flex items-center justify-center shrink-0">
-              <User className="h-8 w-8 md:h-10 md:w-10 text-accent" strokeWidth={2} />
+          <div className="relative flex items-center gap-3 sm:gap-4">
+            <div className="h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full bg-card/15 backdrop-blur border-2 border-accent/40 flex items-center justify-center shrink-0">
+              {loading ? (
+                <Loader2 className="h-6 w-6 text-accent animate-spin" />
+              ) : (
+                <User className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 text-accent" strokeWidth={2} />
+              )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-display text-2xl md:text-3xl font-black leading-tight">
-                Karibu, <em className="not-italic text-accent">guest</em>
+              <div className="font-display text-xl sm:text-2xl md:text-3xl font-black leading-tight truncate">
+                Karibu,{" "}
+                <em className="not-italic text-accent">
+                  {loading ? "..." : user ? displayName : "guest"}
+                </em>
               </div>
-              <p className="text-xs md:text-sm text-white/85 mt-1">
-                Sign in to track orders, save favourites and check out faster.
+              <p className="text-[11px] sm:text-xs md:text-sm text-white/85 mt-1 truncate">
+                {user
+                  ? user.email
+                  : "Sign in to track orders, save favourites and check out faster."}
               </p>
             </div>
           </div>
 
           <div className="relative flex flex-wrap gap-2 mt-4">
-            <button className="bg-primary hover:bg-primary-dark text-primary-foreground font-grotesk font-semibold uppercase tracking-wider text-xs px-4 py-2.5 rounded-full transition shadow-card flex items-center gap-1.5">
-              <LogIn className="h-3.5 w-3.5" /> Sign in
-            </button>
-            <button className="bg-white/15 backdrop-blur hover:bg-white/25 border border-white/40 text-white font-grotesk font-semibold uppercase tracking-wider text-xs px-4 py-2.5 rounded-full transition">
-              Create account
-            </button>
+            {user ? (
+              <button
+                onClick={handleSignOut}
+                className="bg-white/15 backdrop-blur hover:bg-white/25 border border-white/40 text-white font-grotesk font-semibold uppercase tracking-wider text-xs px-4 py-2.5 rounded-full transition flex items-center gap-1.5"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Sign out
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="bg-primary hover:bg-primary-dark text-primary-foreground font-grotesk font-semibold uppercase tracking-wider text-xs px-4 py-2.5 rounded-full transition shadow-card flex items-center gap-1.5"
+                >
+                  <LogIn className="h-3.5 w-3.5" /> Sign in
+                </button>
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="bg-white/15 backdrop-blur hover:bg-white/25 border border-white/40 text-white font-grotesk font-semibold uppercase tracking-wider text-xs px-4 py-2.5 rounded-full transition"
+                >
+                  Create account
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -95,11 +133,11 @@ const Account = () => {
                 const Inner = (
                   <>
                     <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center shrink-0 border border-secondary/15">
-                      <item.icon className="h-4.5 w-4.5" strokeWidth={2.2} />
+                      <item.icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
                     </div>
                     <div className="flex-1 min-w-0 leading-tight">
-                      <div className="text-sm font-display font-bold text-secondary">{item.label}</div>
-                      <div className="text-[11px] text-muted-foreground">{item.sub}</div>
+                      <div className="text-sm font-display font-bold text-secondary truncate">{item.label}</div>
+                      <div className="text-[11px] text-muted-foreground truncate">{item.sub}</div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
                   </>
