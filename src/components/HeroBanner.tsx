@@ -29,33 +29,40 @@ export const HeroBanner = () => {
             <div className="absolute -right-16 -top-16 w-64 h-64 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -left-10 bottom-0 w-40 h-40 bg-primary/20 rounded-full blur-2xl pointer-events-none" />
 
-            {/* Rotating stamp badge */}
-            <div className="absolute top-4 right-4 md:top-6 md:right-8 animate-stamp z-10">
-              <div className="bg-accent text-accent-foreground rounded-full h-20 w-20 md:h-24 md:w-24 flex flex-col items-center justify-center text-center shadow-elevated border-2 border-dashed border-secondary/40">
-                <span className="font-display font-black text-2xl md:text-3xl leading-none">60%</span>
-                <span className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold mt-0.5">Off Today</span>
+            {/* Readability scrim — darkens left side behind text without hiding the gradient */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/55 via-black/30 to-transparent" />
+            {/* Bottom fade for the CTA row */}
+            <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none bg-gradient-to-t from-black/40 to-transparent" />
+
+            {/* Rotating stamp badge — kept clear of the headline column on mobile */}
+            <div className="absolute top-3 right-3 md:top-6 md:right-8 animate-stamp z-10">
+              <div className="bg-accent text-accent-foreground rounded-full h-16 w-16 md:h-24 md:w-24 flex flex-col items-center justify-center text-center shadow-elevated border-2 border-dashed border-secondary/40">
+                <span className="font-display font-black text-xl md:text-3xl leading-none">60%</span>
+                <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold mt-0.5">Off Today</span>
               </div>
             </div>
 
-            <span className="inline-flex items-center gap-1.5 self-start bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-4 font-grotesk">
-              <Sparkles className="h-3 w-3" /> The Soko Edit
-            </span>
+            <div className="relative z-[1] max-w-md">
+              <span className="inline-flex items-center gap-1.5 self-start bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-4 font-grotesk shadow-card">
+                <Sparkles className="h-3 w-3" /> The Soko Edit
+              </span>
 
-            <h1 className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-3 max-w-md">
-              Wear your <em className="not-italic text-accent stamp-underline">story</em>,
-              dress your <em className="not-italic text-accent">home</em>.
-            </h1>
-            <p className="text-sm md:text-base opacity-90 max-w-md mb-5 leading-relaxed">
-              Curated fashion for the whole family, plus statement carpets and door mats —
-              all from Wajose, all delivered across Kenya.
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              <button className="bg-primary hover:bg-primary-dark text-primary-foreground font-grotesk font-semibold uppercase tracking-wider text-xs md:text-sm px-5 py-3 rounded-full transition shadow-card flex items-center gap-1.5">
-                Shop the edit <ChevronRight className="h-4 w-4" />
-              </button>
-              <button className="bg-card/10 backdrop-blur hover:bg-card/20 border border-card/30 text-secondary-foreground font-grotesk font-semibold uppercase tracking-wider text-xs md:text-sm px-5 py-3 rounded-full transition">
-                New arrivals
-              </button>
+              <h1 className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-3 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                Wear your <em className="not-italic text-accent stamp-underline">story</em>,
+                dress your <em className="not-italic text-accent">home</em>.
+              </h1>
+              <p className="text-sm md:text-base text-white/95 mb-5 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+                Curated fashion for the whole family, plus statement carpets and door mats —
+                all from Wajose, all delivered across Kenya.
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                <button className="bg-primary hover:bg-primary-dark text-primary-foreground font-grotesk font-semibold uppercase tracking-wider text-xs md:text-sm px-5 py-3 rounded-full transition shadow-card flex items-center gap-1.5">
+                  Shop the edit <ChevronRight className="h-4 w-4" />
+                </button>
+                <button className="bg-white/15 backdrop-blur-md hover:bg-white/25 border border-white/40 text-white font-grotesk font-semibold uppercase tracking-wider text-xs md:text-sm px-5 py-3 rounded-full transition">
+                  New arrivals
+                </button>
+              </div>
             </div>
           </div>
 
